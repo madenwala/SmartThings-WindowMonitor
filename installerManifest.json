@@ -1,27 +1,27 @@
 {
   "namespace": "madenwala",
   "repoOwner": "madenwala",
-  "repoName": "SmartThingsSugarmate",
+  "repoName": "SmartThings-WindowMonitor",
   "repoBranch": "master",
-  "name": "Sugarmate for SmartThings",
+  "name": "Window Monitor for SmartThings",
   "author": "Mohammed Adenwala",
-  "description": "Sugarmate SmartApp for Samsung SmartThings Hub",
+  "description": "Hour weather forcasts to detect upcoming precipitation and remind you to close any open windows.",
   "category": "My Apps",
-  "bannerUrl": "https://raw.githubusercontent.com/madenwala/SmartThingsSugarate/master/icons/SugarmateBanner.png",
-  "forumUrl": "https://github.com/madenwala/SmartThingsSugarmate/blob/master/README.md",
-  "docUrl": "https://github.com/madenwala/SmartThingsSugarmate/blob/master/README.md",
+  "bannerUrl": "https://raw.githubusercontent.com/madenwala/SmartThings-WindowMonitor/master/icons/IconBanner.png",
+  "forumUrl": "https://github.com/madenwala/SmartThings-WindowMonitor/blob/master/README.md",
+  "docUrl": "https://github.com/madenwala/SmartThings-WindowMonitor/blob/master/README.md",
   "releaseType": "production",
-  "keywords": [ "sugarmate", "diabetic", "diabetes", "t1d", "dexcom", "glucose", "sugar" ],
+  "keywords": [ "windows", "weather", "rain", "precipitation", "snow", "monitor", "contact sensors" ],
   "notes": "Nothing to show here (yet)",
   "smartApps": {
     "parent": {
-      "name": "Sugarmate",
-      "iconUrl": "https://raw.githubusercontent.com/madenwala/SmartThingsSugarmate/master/icons/Sugarmate.png",
+      "name": "Window Monitor for SmartThings",
+      "iconUrl": "https://raw.githubusercontent.com/madenwala/SmartThings-WindowMonitor/master/icons/Icon.png",
       "published": true,
       "oAuth": true,
       "version": "0.1.0",
       "appSettings": {},
-      "appUrl": "smartapps/madenwala/sugarmate.src/sugarmate.groovy"
+      "appUrl": "smartapps/madenwala/windowmonitor.src/windowmonitor.groovy"
     },
     "children": []
   }
