@@ -24,6 +24,11 @@ definition(
 	iconX3Url: "https://raw.githubusercontent.com/madenwala/SmartThings-WindowMonitor/master/icons/Icon@3x.png")
 
 preferences {
+    section("Personalization") {
+    	paragraph "Test"
+        input "personName", "text", required: true, title: "Name"
+    }
+    /*
     section("Sensors") {
         input "sensors", "capability.contactSensor", title: "Windows to Monitor", multiple: true, required: false
     }
@@ -37,7 +42,7 @@ preferences {
     section("Settings") {
     	input "accuweatherApiKey", "text", title: "AccuWeather API Key", required: true, defaultValue: "IDAqoGCKyaIPlMgvr4dGjIos8uOTLqqA"
         input "locationKey", "text", title: "Location Key", required: true, defaultValue: "26448_PC"
-    }
+    }*/
 }
 
 def installed() {
@@ -51,14 +56,18 @@ def updated() {
 	initialize()
 }
 
+//def APP_NAME = "WindowMonitor"
+
 def initialize() {
-	state.APP_NAME = "SensorWeatherMonitor"
-    state.LAST_RUN = new Date()
-    subscribe(app, appHandler)
-    subscribe(sensors, "contact.open", eventHandler)
+	//state.APP_NAME = "WindowMonitor"
+    //state.LAST_RUN = new Date()
+    //subscribe(app, appHandler)
+    //subscribe(sensors, "contact.open", eventHandler)
     //runEvery1Minute(refreshData)
-    runEvery1Hour(refreshData)
+    //runEvery1Hour(refreshData)
 }
+
+/*
 
 def appHandler(evt) {
 	log.debug state.APP_NAME + ": App Event ${evt.value} received"
@@ -175,3 +184,4 @@ def notifications(message) {
     		sendPush(message)
     }
 }
+*/

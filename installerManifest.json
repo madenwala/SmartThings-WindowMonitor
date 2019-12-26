@@ -15,7 +15,7 @@
   "notes": "Nothing to show here (yet)",
   "smartApps": {
     "parent": {
-      "name": "Window Monitor for SmartThings",
+      "name": "Window Monitor",
       "iconUrl": "https://raw.githubusercontent.com/madenwala/SmartThings-WindowMonitor/master/icons/Icon.png",
       "published": true,
       "oAuth": true,
