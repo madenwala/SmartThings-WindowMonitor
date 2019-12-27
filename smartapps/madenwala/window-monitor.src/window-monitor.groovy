@@ -23,6 +23,8 @@ definition(
     iconX2Url: "https://raw.githubusercontent.com/madenwala/SmartThings-WindowMonitor/master/icons/Icon@2x.png",
     iconX3Url: "https://raw.githubusercontent.com/madenwala/SmartThings-WindowMonitor/master/icons/Icon@3x.png")
 
+def APP_NAME = "WindowMonitor"
+
 preferences {
     section("Sensors") {
         input "sensors", "capability.contactSensor", title: "Windows to Monitor", multiple: true, required: false
@@ -35,23 +37,21 @@ preferences {
         input "alexaSpeakers", "device.echoSpeaksDevice", title: "Alexa Devices", multiple: true, required: false
     }
     section("Settings") {
-    	input "accuweatherApiKey", "text", title: "AccuWeather API Key", required: true, defaultValue: "IDAqoGCKyaIPlMgvr4dGjIos8uOTLqqA"
+    	input "accuWeatherApiKey", "text", title: "AccuWeather API Key", required: true, defaultValue: "IDAqoGCKyaIPlMgvr4dGjIos8uOTLqqA"
         input "locationKey", "text", title: "Location Key", required: true, defaultValue: "26448_PC"
     }
 }
 
 def installed() {
-	log.debug "Installed with settings: ${settings}"
+	log.debug APP_NAME + ":Installed with settings: ${settings}"
 	initialize()
 }
 
 def updated() {
-	log.debug "Updated with settings: ${settings}"
+	log.debug APP_NAME + ": Updated with settings: ${settings}"
 	unsubscribe()
 	initialize()
 }
-
-def APP_NAME = "WindowMonitor"
 
 def initialize() {
 	state.APP_NAME = "WindowMonitor"
@@ -68,7 +68,7 @@ def appHandler(evt) {
 }
 
 def eventHandler(evt) {
-	log.debug "Sensor opened: ${evt}"
+	log.debug APP_NAME + ": Sensor opened: ${evt}"
     refreshData(false)
 }
 
@@ -107,8 +107,8 @@ def getOpenSensors() {
 
 def getData() {
 	try{
-        def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/26448_PC?apikey=IDAqoGCKyaIPlMgvr4dGjIos8uOTLqqA"
-        //def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/1hour/26448_PC?apikey=IDAqoGCKyaIPlMgvr4dGjIos8uOTLqqA"
+        def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationKey}?apikey=${accuWeatherApiKey}"
+        //def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/1hour/${locationKey}?apikey=${accuWeatherApiKey}"
         log.debug state.APP_NAME + ": Refresh Data from ${jsonUrl}"
 
         def params = [
