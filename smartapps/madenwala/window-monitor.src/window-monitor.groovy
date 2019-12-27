@@ -24,10 +24,6 @@ definition(
     iconX3Url: "https://raw.githubusercontent.com/madenwala/SmartThings-WindowMonitor/master/icons/Icon@3x.png")
 
 preferences {
-    section("Personalization") {
-    	paragraph "Test"
-        input "personName", "text", required: true, title: "Name"
-    }
     section("Sensors") {
         input "sensors", "capability.contactSensor", title: "Windows to Monitor", multiple: true, required: false
     }
