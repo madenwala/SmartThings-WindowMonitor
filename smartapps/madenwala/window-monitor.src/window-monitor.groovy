@@ -144,16 +144,16 @@ def getMessage(data, isAppHandler) {
 	try {
         def message = null
         if(data == null || data.length == 0){
-            message = "I can't tell if it's going to rain because I could not access AccuWeather data."
+            message = "I can't tell if it's going to precipitation because I could not access AccuWeather data."
             log.error message    
         } else if(data.size() >= 1 && (data[0].HasPrecipitation || data[0].PrecipitationProbability > 0)) {
-            message = "There is a ${data[0].PrecipitationProbability}% chance of rain within the hour."
+            message = "There is a ${data[0].PrecipitationProbability}% chance of precipitation within the hour. Consider keeping the windows closed."
         } else if(data.size() >= 2 && (data[1].HasPrecipitation || data[1].PrecipitationProbability > 0)) {
-            message = "There is a ${data[1].PrecipitationProbability}% chance of rain after an hour."
+            message = "There is a ${data[1].PrecipitationProbability}% chance of precipitation after an hour."
         } else if(isAppHandler) {
-            message = "No rain in the forecast. You're welcome to open windows or doors."
+            message = "No precipitation in the forecast. You're welcome to open windows or doors."
         } else {
-            log.info "No rain in the current forecast."
+            log.info "No precipitation in the current forecast."
         }
         log.debug "Message: " + message;
         return message;
