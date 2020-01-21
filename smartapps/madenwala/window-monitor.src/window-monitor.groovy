@@ -26,6 +26,15 @@ definition(
 def APP_NAME = "WindowMonitor"
 
 preferences {
+    section("Settings") {
+        href(
+             title: "AccuWeather API Key",
+             style: "external",
+             url: "https://developer.accuweather.com/user/me/apps",
+             description: "SmartApp requires an API Key from the AccuWeather developer portal.")             
+    	input "accuWeatherApiKey", "text", title: "AccuWeather API Key", required: true, defaultValue: "IDAqoGCKyaIPlMgvr4dGjIos8uOTLqqA"
+        input "zipCode", "text", title: "Zip Code", required: true, submitOnChange: true
+    }
     section("Sensors") {
         input "sensors", "capability.contactSensor", title: "Windows to Monitor", multiple: true, required: false
     }
@@ -34,11 +43,7 @@ preferences {
     }
     section("Audio Notifications") {
         input "audioSpeakers", "capability.audioNotification", title: "Audio Devices", multiple: true, required: false
-        input "alexaSpeakers", "device.echoSpeaksDevice", title: "Alexa Devices", multiple: true, required: false
-    }
-    section("Settings") {
-    	input "accuWeatherApiKey", "text", title: "AccuWeather API Key", required: true, defaultValue: "IDAqoGCKyaIPlMgvr4dGjIos8uOTLqqA"
-        input "locationKey", "text", title: "Location Key", required: true, defaultValue: "26448_PC"
+        input "alexaSpeakers", "device.echoSpeaksDevice", title: "Alexa Devices", multiple: true, required: false, hideWhenEmpty: true
     }
 }
 
@@ -56,9 +61,11 @@ def updated() {
 def initialize() {
 	state.APP_NAME = "WindowMonitor"
     state.LAST_RUN = new Date()
+    state.LOCATION_KEY = null
     subscribe(app, appHandler)
     subscribe(sensors, "contact.open", eventHandler)
-    //runEvery1Minute(refreshData)
+    state.LOCATION_KEY = getLocationKey()
+    log.warn state.APP_NAME + ": LOCATION_KEY for ZipCode ${zipCode}: ${state.LOCATION_KEY}"
     runEvery1Hour(refreshData)
 }
 
@@ -80,6 +87,15 @@ def refreshData(isAppHandler){
 	try {
         log.info state.APP_NAME + ": Refresh data..."
         def openSenors = getOpenSensors()
+        
+        if(state.LOCATION_KEY == null) {
+    		state.LOCATION_KEY = getLocationKey()
+    		log.warn state.APP_NAME + ": LOCATION_KEY for ZipCode ${zipCode}: ${state.LOCATION_KEY}"
+            if(state.LOCATION_KEY == null) {
+            	notifications("Could not check weather because location couldn't be determined from the zip code.")
+                return
+            }
+        }
 
         if(openSensors != null && openSensors.isEmpty() == false) {
             log.debug state.APP_NAME + ": ${openSensors} are open"
@@ -105,10 +121,44 @@ def getOpenSensors() {
     return openSensors
 }
 
+def getLocationKey() {
+	try{
+        def jsonUrl = "http://dataservice.accuweather.com/locations/v1/postalcodes/search?q=${zipCode}&apikey=${accuWeatherApiKey}"
+        log.debug state.APP_NAME + ": Refresh Zip from ${jsonUrl}"
+
+        def params = [
+            uri: jsonUrl,
+            contentType: 'application/json'
+        ]
+
+        httpGet(params) { resp ->
+            if(resp.status == 200){
+                // get the data from the response body
+                //log.debug state.APP_NAME + ": Data returned!"
+                log.debug state.APP_NAME + ": Data: ${resp.data}"
+                return resp.data[0].Key;
+            } else {
+                // get the status code of the response
+                log.debug state.APP_NAME + ": Status Code: ${resp.status}"
+                return null;
+            }  
+        }
+    } catch(e) {
+        if (e.equals("groovyx.net.http.ResponseParseException: Unauthorized")) {
+            log.debug "User unauthorized, requesting new token"
+             // do something
+        }
+        else {
+            log.error "Something went wrong with the AccuWeather API call $e"
+        }
+        return null;
+    }
+}
+
 def getData() {
 	try{
-        def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${locationKey}?apikey=${accuWeatherApiKey}"
-        //def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/1hour/${locationKey}?apikey=${accuWeatherApiKey}"
+        def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${state.LOCATION_KEY}?apikey=${accuWeatherApiKey}"
+        //def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/1hour/${state.LOCATION_KEY}?apikey=${accuWeatherApiKey}"
         log.debug state.APP_NAME + ": Refresh Data from ${jsonUrl}"
 
         def params = [
