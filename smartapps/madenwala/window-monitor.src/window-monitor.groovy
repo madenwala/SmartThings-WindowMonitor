@@ -137,7 +137,6 @@ def getLocationKey() {
         httpGet(params) { resp ->
             if(resp.status == 200){
                 // get the data from the response body
-                //log.debug state.APP_NAME + ": Data returned!"
                 log.debug state.APP_NAME + ": Data: ${resp.data}"
                 return resp.data[0].Key;
             } else {
@@ -148,8 +147,7 @@ def getLocationKey() {
         }
     } catch(e) {
         if (e.equals("groovyx.net.http.ResponseParseException: Unauthorized")) {
-            log.debug "User unauthorized, requesting new token"
-             // do something
+            log.error "User unauthorized, requesting new token"
         }
         else {
             log.error "Something went wrong with the AccuWeather API call $e"
@@ -161,7 +159,6 @@ def getLocationKey() {
 def getData() {
 	try{
         def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${state.LOCATION_KEY}?apikey=${accuWeatherApiKey}"
-        //def jsonUrl = "https://dataservice.accuweather.com/forecasts/v1/hourly/1hour/${state.LOCATION_KEY}?apikey=${accuWeatherApiKey}"
         log.debug state.APP_NAME + ": Refresh Data from ${jsonUrl}"
 
         def params = [
@@ -172,7 +169,6 @@ def getData() {
         httpGet(params) { resp ->
             if(resp.status == 200){
                 // get the data from the response body
-                //log.debug state.APP_NAME + ": Data returned!"
                 log.debug state.APP_NAME + ": Data: ${resp.data[0]}"
                 return resp.data;
             } else {
@@ -183,8 +179,7 @@ def getData() {
         }
     } catch(e) {
         if (e.equals("groovyx.net.http.ResponseParseException: Unauthorized")) {
-            log.debug "User unauthorized, requesting new token"
-             // do something
+            log.error "User unauthorized, requesting new token"
         }
         else {
             log.error "Something went wrong with the AccuWeather API call $e"
