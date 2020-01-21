@@ -26,22 +26,25 @@ definition(
 def APP_NAME = "WindowMonitor"
 
 preferences {
-    section("Settings") {
+    section("AccuWeather") {
+    	paragraph "This smart app requires you to have your own developer account from AccuWeather's developer website. The free limited-trial account should provide you plenty of credits per day to run this app."
         href(
              title: "AccuWeather API Key",
              style: "external",
              url: "https://developer.accuweather.com/user/me/apps",
-             description: "SmartApp requires an API Key from the AccuWeather developer portal.")             
+             description: "Register with AccuWeather to create an API key")             
     	input "accuWeatherApiKey", "text", title: "AccuWeather API Key", required: true, defaultValue: "IDAqoGCKyaIPlMgvr4dGjIos8uOTLqqA"
-        input "zipCode", "text", title: "Zip Code", required: true, submitOnChange: true
     }
-    section("Sensors") {
-        input "sensors", "capability.contactSensor", title: "Windows to Monitor", multiple: true, required: false
+    section("Settings") {
+        input "zipCode", "text", title: "Zip code", required: true
+        input "sensors", "capability.contactSensor", title: "Windows to monitor", multiple: true, required: true
     }
-    section("Device Notifications") {
+    section("Device Options") {
+    	paragraph "Enable device notifications when rain is detected while windows are open"
     	input "enableNotifications", "boolean", title: "Send push notifications", defaultValue: true
     }
     section("Audio Notifications") {
+    	paragraph "Select any speaker device for audio notifications when rain is detected while windows are open"
         input "audioSpeakers", "capability.audioNotification", title: "Audio Devices", multiple: true, required: false
         input "alexaSpeakers", "device.echoSpeaksDevice", title: "Alexa Devices", multiple: true, required: false, hideWhenEmpty: true
     }
